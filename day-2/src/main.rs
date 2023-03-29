@@ -75,14 +75,13 @@ fn read_input() -> Vec<Match> {
 
     for line in contents.lines() {
         let line = line.unwrap();
-        let first = line.split(" ").nth(0).expect("Not able to parse line");
-        let second = line.split(" ").nth(1).expect("Not able to parse line");
+        let (opp, pl) = line.split_once(" ").expect("Not able to split line");
 
         matches.push(Match {
             round: count,
-            player_1: get_weapon(first),
-            player_2: get_weapon(second),
-            outcome: match second {
+            player_1: get_weapon(opp),
+            player_2: get_weapon(pl),
+            outcome: match pl {
                 "X" => OutCome::Lose,
                 "Y" => OutCome::Draw,
                 _ => OutCome::Win,
@@ -97,10 +96,7 @@ fn read_input() -> Vec<Match> {
 
 fn part_1() {
     let matches = read_input();
-    let result = matches.iter().fold(0, |mut acc, m| {
-        acc += get_point(m);
-        acc
-    });
+    let result = matches.iter().fold(0, |acc, m| acc + get_point(m));
 
     println!("[Part 1] Result: {}", result);
 }
@@ -130,10 +126,7 @@ fn part_2() {
                 outcome: m.outcome,
             }
         })
-        .fold(0, |mut acc, m| {
-            acc += get_point(&m);
-            acc
-        });
+        .fold(0, |acc, m| acc + get_point(&m));
     println!("[Part 2] Result: {}", result);
 }
 
